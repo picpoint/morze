@@ -1,7 +1,9 @@
 var BeepScript = require('beepscript');
 var bs = new BeepScript();
 
+
 /*
+// это шаблон как работает программа, если раскоментить и запустить, будет простенькая мелодия
 bs.beep(440, 1);                          //Play 400 Hz for 1 second
 bs.sleep(1/2);                            //Sleep for 1/2 second
 bs.beep('C#4', 1/4);                      //Play note C#4 for 1/4 second
@@ -10,6 +12,7 @@ bs.beep(500, 1/2);                        //Play 500 Hz for 1/2 seconds
 bs.sleep(0.5);                            //Sleep for 0.5 seconds
 bs.beep('Eb5', 2);
 
+// здесь представлен пример выше но запись иная, чтоб не писать много команд bs.beep
 bs.seq([                                 //Play a sequency of beeps and sleeps
   [440, 1],                            //A beep is an array with note or frequency and duration
   1/2,                                 //A sleep is a number
@@ -21,6 +24,8 @@ bs.seq([                                 //Play a sequency of beeps and sleeps
 ])
 */
 
+
+// здесь я рассписал обозначение гаммы для себя
 /*
 До	  C;  do [du:]
 Ре	  D;  re [rei]
@@ -31,6 +36,7 @@ bs.seq([                                 //Play a sequency of beeps and sleeps
 Си	  B;  si [si:]
 */
 
+// здесь расписанно обозначение октав, нихких и высоких с бимолями и диезами
 /*
 C0 C#0 Db0 D0 D#0 Eb0 E0 F0 F#0 Gb0 G0 G#0 Ab0 A0 A#0 Bb0 B0
 C1 C#1 Db1 D1 D#1 Eb1 E1 F1 F#1 Gb1 G1 G#1 Ab1 A1 A#1 Bb1 B1
@@ -45,82 +51,7 @@ C8 C#8 Db8 D8 D#8 Eb8 E8 F8 F#8 Gb8 G8 G#8 Ab8 A8 A#8 Bb8 B8
 
 
 /*
-MORZE
-
-а	• —
-б	— • • •
-в	• — —
-г	— — •
-д	— • •
-е	•
-ё	•
-ж	• • • —
-з	— — • •
-и	• •
-й	• — — —
-к	— • —
-л	• — • •
-м	— —
-н	— •
-о	— — —
-п	• — — •
-р	• — •
-с	• • •
-т	—
-у	• • —
-ф	• • — •
-х	• • • •
-ц	— • — •
-ч	— — — •
-ш	— — — —
-щ	— — • —
-ъ	— — • — —
-ы	— • — —
-ь	— • • —
-э	• • — • •
-ю	• • — —
-я	• — • —
-
-*/
-
-
-var obj = {
-    'а': 	'1/2*1',
-    'б':	'1*1/2*1/2*1/2'
-};
-/*
-bs.beep(440, 1);
-bs.sleep(1/2);
-bs.beep(440, 2);
-*/
-
-function codingMorze(str, obj) {
-  var arr = str.split('');
-  var mass = [];
-
-  for (var i = 0; i < arr.length; i++) {
-    for (var key in obj) {
-      if (key == arr[i]) {
-        mass.push(obj[key]);
-      }
-    }
-  }
-
-  for (var j = 0; j < mass.length; j++) {
-    var result = mass[j].split('*');
-    console.log(result);
-    for (var k = 0; k < result.length; k++) {
-      console.log(result[k]);
-      bs.beep(400, result[k]);
-    }
-  }
-}
-
-codingMorze('а', obj);
-
-
-/*
-in the end
+// здесь я уже написал одну известную мелодию, если догадаешься
 
 bs.beep('C3', 1);
   bs.sleep(1/32);
@@ -198,4 +129,78 @@ bs.beep('D#3', 2);
 
 
 
-bs.write('music.wav');
+
+// здесь я рассписал азбуку морзе, её обозначение в русском алфавите
+/*
+MORZE
+
+а	• —
+б	— • • •
+в	• — —
+г	— — •
+д	— • •
+е	•
+ё	•
+ж	• • • —
+з	— — • •
+и	• •
+й	• — — —
+к	— • —
+л	• — • •
+м	— —
+н	— •
+о	— — —
+п	• — — •
+р	• — •
+с	• • •
+т	—
+у	• • —
+ф	• • — •
+х	• • • •
+ц	— • — •
+ч	— — — •
+ш	— — — —
+щ	— — • —
+ъ	— — • — —
+ы	— • — —
+ь	— • • —
+э	• • — • •
+ю	• • — —
+я	• — • —
+
+*/
+
+
+
+var obj = {                               // делаем объект с ключами русскимим буквами, значениями ключей азбукой морзе
+    'а': 	'1/2*1',                        // я обозначил 	"•" за короткий сигнал "1/2"  а "—" за длинный "1"
+    'б':	'1*1/2*1/2*1/2'
+};
+
+
+function codingMorze(str, obj) {         // ф-ия принимает строку которую введёт пользователь и объект obj для нахождения соответсвующего кода
+  var arr = str.split('');               // парсим строку на отдельные символы
+  var mass = [];                         // пустой массив для дальшейшей записи значений
+
+  for (var i = 0; i < arr.length; i++) { // циклом пробегаемся по массиву arr
+    for (var key in obj) {               // при итерации на каждом элементе массива сверяем его в нашем объекте obj
+      if (key == arr[i]) {               // если введённый символ соответствует ключу из объекта
+        mass.push(obj[key]);             // пушим значение объекта в массив, там получается что то типа [[1*1/2*1*1*1/2], [1/2*1/2*1*1/2]]
+      }
+    }
+  }
+
+  for (var j = 0; j < mass.length; j++) { // пробегаемся по получившемуся массиву
+    var result = mass[j].split('*');      // j-е значение я спличу по символу * (это если у меня будет на входе "привет мир")
+    console.log(result);
+    for (var k = 0; k < result.length; k++) { // пробегаюсь по каждому значению одиночного массива - 1 потом 1/2  потом 1/2 потом 1
+      bs.beep(400, result[k]);             // на каждом шаге я это значение подставляю в команду bs.beep
+			console.log(result[k]);
+    }
+  }
+}
+
+codingMorze('а', obj);                     // вызываю ф-ию со значениями
+
+
+bs.write('music.wav');                     // команда записывает полученный результат в файл music.wav
